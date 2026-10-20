@@ -216,8 +216,9 @@ def read_met_data(path, kstar_1, kstar_2, met_grid, SFstart=13700.0, SFduration=
     # select mergers based on supplied kstars
     mergers = bpp.loc[(bpp.kstar_1.isin(kstar_1)) & (bpp.kstar_2.isin(kstar_2)) &
                       (bpp.evol_type == 3)]
+    merger_keys = np.array(mergers.keys())
 
-    return np.array(mergers, dtype=object), N_stars, M_stars
+    return np.array(mergers, dtype=object), N_stars, M_stars, merger_keys
 
 
 def get_cosmic_data(path, kstar_1, kstar_2, mets,
@@ -297,7 +298,7 @@ def get_cosmic_data(path, kstar_1, kstar_2, mets,
     ns = []
     dat = []
     for m in tqdm.tqdm(mets):
-        d, N, M = read_met_data(path, kstar_1, kstar_2, m, SFstart=SFstart, SFduration=SFduration,
+        d, N, M, dat_columns = read_met_data(path, kstar_1, kstar_2, m, SFstart=SFstart, SFduration=SFduration,
                                 pessimistic_cut=pessimistic_cut, CE_cool_filter=CE_cool_filter,
                                 CE_cut=CE_cut, SMT_cut=SMT_cut,
                                 kstar_1_select=kstar_1_select,
@@ -311,4 +312,4 @@ def get_cosmic_data(path, kstar_1, kstar_2, mets,
     ns = np.array(ns)
     dat = np.array(dat, dtype=object)
 
-    return Ms, Ns, ns, dat
+    return Ms, Ns, ns, dat, dat_columns

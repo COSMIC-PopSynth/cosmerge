@@ -92,7 +92,7 @@ class Catalog():
         for key, value in kwargs.items():
             setattr(self, key, value)
 
-        Ms, Ns, ns, merger_dat = utils.get_cosmic_data(path=self.dat_path,
+        Ms, Ns, ns, merger_dat, dat_columns = utils.get_cosmic_data(path=self.dat_path,
                                                        kstar_1=self.kstar_1,
                                                        kstar_2=self.kstar_2,
                                                        mets=self.met_grid,
@@ -108,6 +108,7 @@ class Catalog():
         self.N_sim = Ns
         self.n_merger = ns
         self.merger_dat = merger_dat
+        self.dat_columns = dat_columns
 
     def build_cat(self, n_sample, n_downsample, sigma_log10Z=0.5, z_max=20):
         mergers, ibins = usample.generate_universe(n_sample=n_sample,
@@ -117,6 +118,7 @@ class Catalog():
                                                    N_sim=self.N_sim, 
                                                    n_merger=self.n_merger,
                                                    mergers=self.merger_dat,
+                                                   merger_dat_columns=self.dat_columns,
                                                    sfh_model=self.sfh_model,
                                                    skew=self.skew,
                                                    sigma_log10Z=sigma_log10Z,

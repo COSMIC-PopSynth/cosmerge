@@ -128,7 +128,7 @@ def draw_metallicities_and_redshifts(mets, ns, Ns, sfr_model, sigma_log10Z, skew
 
 
 def generate_universe(n_sample, n_downsample, mets, M_sim, N_sim,
-                      n_merger, mergers, sfh_model, skew, sigma_log10Z, z_max):
+                      n_merger, mergers, merger_dat_columns, sfh_model, skew, sigma_log10Z, z_max):
     """Generates a universe of star formation by sampling metallicities and
     redshifts according to the user specified star formation rate model,
     a mean metallicity evolution from Madau & Fragos (2017)
@@ -160,6 +160,9 @@ def generate_universe(n_sample, n_downsample, mets, M_sim, N_sim,
 
     mergers : numpy.array
         A ragged edge numpy array that contains all mergers for each metallicity bin
+        
+    merger_dat_columns : numpy.array
+        A numpy array containing the names of the keys of the COSMIC data files associated with columns in the `mergers' array
 
     sfh_model : function
         Function which returns the star formation history model
@@ -201,10 +204,10 @@ def generate_universe(n_sample, n_downsample, mets, M_sim, N_sim,
 
     # Now that we have a bunch of formation metallicities and redshifts
     # let's connect them to the COSMIC merger data to build a merger catalog
-    t_delay_ind = 0
-    m1_ind = 1
-    m2_ind = 2
-    bin_num_ind = 43
+    t_delay_ind = np.argwhere(merger_dat_columns=='tphys').item()
+    m1_ind = np.argwhere(merger_dat_columns=='mass_1').item()
+    m2_ind = np.argwhere(merger_dat_columns=='mass_2').item()
+    bin_num_ind = np.argwhere(merger_dat_columns=='bin_num').item()
 
     dat = []
     # loop through our metallicity grid for easy COSMIC data access
